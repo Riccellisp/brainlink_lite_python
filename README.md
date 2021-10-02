@@ -26,3 +26,6 @@ http://developer.neurosky.com/docs/doku.php?id=thinkgear_connector_tgc
   <img src="https://github.com/Riccellisp/brainlink_lite_python/blob/main/tutorial/figs/redicon.png?raw=true" alt="Sublime's custom image"/>
 </p>
 
+8. For python enviroment configuration, install anaconda platform or configure python by yourself. Both solutions work
+https://www.anaconda.com/products/individual
+
