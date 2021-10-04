@@ -11,7 +11,7 @@ tn=Telnet('localhost',13854);
 start=time.time();
 
 # Capture time in seconds
-capture_time = 10
+# capture_time = 10
 
 # Declaring variables for data acquisition
 attention_values = np.array([])
@@ -31,41 +31,44 @@ dataset = []
 tn.write(b'{"enableRawOutput": true, "format": "Json"}');
 
 # Reading data from brainlink for a chosen time
-while time.time() - start < capture_time:
-    
-    # Read data until enter character
-    line=tn.read_until(b'\r');
-    
-    # Convert json to string
-    str_line=json.loads(line);
-    
-    # Saving records
-    records.append(str_line)
-    
-    # Separing each record from brainlink and storing
-    if "rawEeg" in str_line:
-        rawEeg = str_line['rawEeg']
-        rawEegs.append(rawEeg)
-    if "poorSignalLevel" in str_line:
-        signalLevel=str_line['poorSignalLevel'];
-    if "blinkStrength" in str_line:
-        blinkStrength=str_line['blinkStrength'];
-    if "eegPower" in str_line:            
-        waveDict=str_line['eegPower'];
-        eSenseDict=str_line['eSense'];
+while True:
+    try:
+        # Read data until enter character
+        line=tn.read_until(b'\r');
         
-        # Storing values from eegPower and eSense
-        lowGamma_values = np.append(lowGamma_values, [waveDict['lowGamma']]);
-        highGamma_values = np.append(highGamma_values, [waveDict['highGamma']]);
-        highAlpha_values = np.append(highAlpha_values, [waveDict['highAlpha']]);
-        delta_values = np.append(delta_values, [waveDict['delta']]);
-        lowBeta_values = np.append(lowBeta_values, [waveDict['lowBeta']]);
-        highBeta_values = np.append(highBeta_values, [waveDict['highBeta']]);
-        theta_values = np.append(theta_values, [waveDict['theta']]);
-        lowAlpha_values = np.append(lowAlpha_values, [waveDict['lowAlpha']]);
-        attention_values = np.append(attention_values, [eSenseDict['attention']]);
-        meditation_values = np.append(meditation_values, [eSenseDict['meditation']]);
-
+        # Convert json to string
+        str_line=json.loads(line);
+        
+        # Saving records
+        records.append(str_line)
+        
+        # Separing each record from brainlink and storing
+        if "rawEeg" in str_line:
+            rawEeg = str_line['rawEeg']
+            rawEegs.append(rawEeg)
+        if "poorSignalLevel" in str_line:
+            signalLevel=str_line['poorSignalLevel'];
+        if "blinkStrength" in str_line:
+            blinkStrength=str_line['blinkStrength'];
+        if "eegPower" in str_line:            
+            waveDict=str_line['eegPower'];
+            eSenseDict=str_line['eSense'];
+            
+            # Storing values from eegPower and eSense
+            lowGamma_values = np.append(lowGamma_values, [waveDict['lowGamma']]);
+            highGamma_values = np.append(highGamma_values, [waveDict['highGamma']]);
+            highAlpha_values = np.append(highAlpha_values, [waveDict['highAlpha']]);
+            delta_values = np.append(delta_values, [waveDict['delta']]);
+            lowBeta_values = np.append(lowBeta_values, [waveDict['lowBeta']]);
+            highBeta_values = np.append(highBeta_values, [waveDict['highBeta']]);
+            theta_values = np.append(theta_values, [waveDict['theta']]);
+            lowAlpha_values = np.append(lowAlpha_values, [waveDict['lowAlpha']]);
+            attention_values = np.append(attention_values, [eSenseDict['attention']]);
+            meditation_values = np.append(meditation_values, [eSenseDict['meditation']]);
+        time_elapsed = time.time() - start 
+    except KeyboardInterrupt:
+        break
+capture_time = time.time() - start
 # Joining all eegPower records into a matrix        
 eegPower_records = np.vstack([lowGamma_values,highGamma_values,highAlpha_values,delta_values,
                       lowBeta_values,highBeta_values,theta_values,lowAlpha_values,
