@@ -4,14 +4,21 @@ import json
 import time
 from telnetlib import Telnet
 import matplotlib.pyplot as plt
+from pylive import live_plotter
+# import keyboard
+
 # Performing telnet connection
 tn=Telnet('localhost',13854);
+
+size = 100
+x_vec = np.linspace(0,1,size+1)[0:-1]
+y_vec = np.random.randn(len(x_vec))
+line1 = []
 
 # Initializing time counter
 start=time.time();
 
 # Capture time in seconds
-# capture_time = 10
 
 # Declaring variables for data acquisition
 attention_values = np.array([])
@@ -65,7 +72,16 @@ while True:
             lowAlpha_values = np.append(lowAlpha_values, [waveDict['lowAlpha']]);
             attention_values = np.append(attention_values, [eSenseDict['attention']]);
             meditation_values = np.append(meditation_values, [eSenseDict['meditation']]);
-        time_elapsed = time.time() - start 
+        # Calling realtime plot
+            rand_val = np.random.randn(1)
+            y_vec[-1] = lowGamma_values[-1]
+            line1 = live_plotter(x_vec,y_vec,line1)
+            y_vec = np.append(y_vec[1:],0.0)
+            
+        time_elapsed = time.time() - start
+        # if keyboard.read_key() == 'q':
+        #     print("stopping")
+        #     break
     except KeyboardInterrupt:
         break
 capture_time = time.time() - start
@@ -86,4 +102,4 @@ columns = ['lowAlpha_values','highAlpha_values', 'lowBeta_values', 'highBeta_val
 dataset = pd.DataFrame(eegPower_records,columns=columns)
 
 #storing dataset
-dataset.to_csv(f'brainlink_lite {capture_time} seconds.csv',index=False)
+dataset.to_csv(f'brainlink_lite {round(capture_time)} seconds.csv',index=False)
