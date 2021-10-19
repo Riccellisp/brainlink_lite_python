@@ -72,11 +72,28 @@ while True:
             lowAlpha_values = np.append(lowAlpha_values, [waveDict['lowAlpha']]);
             attention_values = np.append(attention_values, [eSenseDict['attention']]);
             meditation_values = np.append(meditation_values, [eSenseDict['meditation']]);
-        # Calling realtime plot
+            
+            # Calling realtime plot
             rand_val = np.random.randn(1)
-            y_vec[-1] = lowGamma_values[-1]
-            line1 = live_plotter(x_vec,y_vec,line1)
-            y_vec = np.append(y_vec[1:],0.0)
+            # y_vec[-1] = lowGamma_values[-1]
+            # line1 = live_plotter(x_vec,y_vec,line1,color='b')
+            # y_vec = np.append(y_vec[1:],0.0)
+            
+            if attention_values[-1] > 60:
+                color='b'
+                y_vec[-1] = attention_values[-1]
+                line1 = live_plotter(x_vec,y_vec,line1,color=color)
+                y_vec = np.append(y_vec[1:],0.0)
+            if attention_values[-1] > 80:
+                color='g'
+                y_vec[-1] = attention_values[-1]
+                line1 = live_plotter(x_vec,y_vec,line1,color=color)
+                y_vec = np.append(y_vec[1:],0.0)
+            if attention_values[-1] < 40:
+                color='r'
+                y_vec[-1] = attention_values[-1]
+                line1 = live_plotter(x_vec,y_vec,line1,color=color)
+                y_vec = np.append(y_vec[1:],0.0)
             
         time_elapsed = time.time() - start
         # if keyboard.read_key() == 'q':
@@ -84,6 +101,7 @@ while True:
         #     break
     except KeyboardInterrupt:
         break
+        tn.close()
 capture_time = time.time() - start
 # Joining all eegPower records into a matrix        
 eegPower_records = np.vstack([lowGamma_values,highGamma_values,highAlpha_values,delta_values,

@@ -4,17 +4,28 @@ import numpy as np
 # use ggplot style for more sophisticated visuals
 plt.style.use('ggplot')
 
-def live_plotter(x_vec,y1_data,line1,identifier='',pause_time=0.1):
+def live_plotter(x_vec,y1_data,line1,color,identifier='',pause_time=0.1):
     if line1==[]:
         # this is the call to matplotlib that allows dynamic plotting
         plt.ion()
         fig = plt.figure(figsize=(13,6))
         ax = fig.add_subplot(111)
         # create a variable for the line so we can later update it
-        line1, = ax.plot(x_vec,y1_data,'-o',alpha=0.8)        
+        line1, = ax.plot(x_vec,y1_data,f'{color}-o',alpha=0.8)
         #update plot label/title
         plt.ylabel('Y Label')
         plt.title('Title: {}'.format(identifier))
+        plt.show()
+    else:
+        # this is the call to matplotlib that allows dynamic plotting
+        plt.ion()
+        if color=='r':
+            color2 = 'red'
+        if color=='b':
+            color2 = 'blue'
+        if color=='g':
+            color2 = 'green'
+        line1.set_color(color2)
         plt.show()
     
     # after the figure, axis, and line are created, we only need to update the y-data
@@ -29,12 +40,13 @@ def live_plotter(x_vec,y1_data,line1,identifier='',pause_time=0.1):
     return line1
 
 # the function below is for updating both x and y values (great for updating dates on the x-axis)
-def live_plotter_xy(x_vec,y1_data,line1,identifier='',pause_time=0.01):
+def live_plotter_xy(x_vec,y1_data,line1,color,identifier='',pause_time=0.01):
     if line1==[]:
         plt.ion()
         fig = plt.figure(figsize=(13,6))
         ax = fig.add_subplot(111)
-        line1, = ax.plot(x_vec,y1_data,'r-o',alpha=0.8)
+        line1, = ax.plot(x_vec,y1_data,f'{color}-o',alpha=0.8)
+        line1.color = color
         plt.ylabel('Y Label')
         plt.title('Title: {}'.format(identifier))
         plt.show()
